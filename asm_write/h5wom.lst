@@ -1,0 +1,53 @@
+     1                                  global _start
+     2                                  
+     3                                  %macro PRINT 2
+     4                                  	push eax
+     5                                  	mov	eax, 4	; call "write"
+     6                                  	mov	ebx, 1	; stdout
+     7                                  	mov 	ecx, %1 ; message, type "string"
+     8                                  	mov	edx, %2	; lenght of message
+     9                                  	int 80h		; linux syscall
+    10                                  	pop eax 
+    11                                  %endmacro
+    12                                  
+    13                                  ;%macro PNUMBER 1
+    14                                  ;	mov eax, %1
+    15                                  ;%endmacro
+    16                                  
+    17                                  section .data
+    18 00000000 0A                      nstr	db 0xA 
+    19                                  
+    20                                  section .bss
+    21 00000000 <res 100h>              array	resb 256
+    22 00000100 ????????                msg	resd 1
+    23                                  
+    24                                  section .text
+    25 00000000 B800000000              _start	mov eax, 0 
+    26                                  again:	
+    27 00000005 C705[00010000]4600-     	mov [msg], dword  0x46
+    27 0000000D 0000               
+    28                                  	PRINT msg, 1 
+     4 0000000F 50                  <1>  push eax
+     5 00000010 B804000000          <1>  mov eax, 4
+     6 00000015 BB01000000          <1>  mov ebx, 1
+     7 0000001A B9[00010000]        <1>  mov ecx, %1
+     8 0000001F BA01000000          <1>  mov edx, %2
+     9 00000024 CD80                <1>  int 80h
+    10 00000026 58                  <1>  pop eax
+    29                                  	PRINT nstr, 1
+     4 00000027 50                  <1>  push eax
+     5 00000028 B804000000          <1>  mov eax, 4
+     6 0000002D BB01000000          <1>  mov ebx, 1
+     7 00000032 B9[00000000]        <1>  mov ecx, %1
+     8 00000037 BA01000000          <1>  mov edx, %2
+     9 0000003C CD80                <1>  int 80h
+    10 0000003E 58                  <1>  pop eax
+    30 0000003F 40                      	inc eax
+    31 00000040 83F805                  	cmp eax, 5
+    32 00000043 7CC0                    	jl again
+    33                                  
+    34                                  ;+call exit
+    35 00000045 B801000000              	mov eax, 1	; call "_exit"
+    36 0000004A BB00000000              	mov ebx, 0	; halt(0)
+    37 0000004F CD80                    	int 	80h
+    38                                  ;-call exit

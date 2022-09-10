@@ -1,0 +1,22 @@
+nasm -f elf [FILENAME]
+ld -m elf_i386 [FILENAME.O] -o [FILENAME]
+
+PUTCHAR AL, AH, BL, BH, CL, CH, DL, DH, [path]
+GETCHAR => EAX ; AL => ; EAX = FFFFFFFF = -1 = EoF
+
+10: [NUMBER]
+16: 0[NUMBER]h; $0[NUMBER]; 0x[NUMBER] 
+8:  [NUMBER]q; [NUMBER]o
+2:  [NUMBER]b
+
+All Linux syscalls take 4 bytes in parametrs.
+
+word:	2 bytes
+dword:	4 bytes
+qword:	8 bytes
+
+resb:	1 byte
+resw:	2 bytes
+resd:	4 bytes
+
+
